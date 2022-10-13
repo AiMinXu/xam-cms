@@ -1,0 +1,93 @@
+import {
+  ElAside,
+  ElAvatar,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElButton,
+  ElButtonGroup,
+  ElCard,
+  ElCheckbox,
+  ElCol,
+  ElConfigProvider,
+  ElContainer,
+  ElDatePicker,
+  ElDescriptions,
+  ElDescriptionsItem,
+  ElDialog,
+  ElDropdown,
+  ElDropdownItem,
+  ElDropdownMenu,
+  ElForm,
+  ElFormItem,
+  ElHeader,
+  ElImage,
+  ElInput,
+  ElLink,
+  ElMain,
+  ElMenu,
+  ElMenuItem,
+  ElOption,
+  ElPagination,
+  ElRow,
+  ElSelect,
+  ElSubMenu,
+  ElTable,
+  ElTableColumn,
+  ElTabPane,
+  ElTabs,
+  ElTag,
+  ElTooltip,
+  ElTree
+} from 'element-plus'
+import 'element-plus/dist/index.css'
+import { App } from 'vue'
+
+const components = [
+  ElButton,
+  ElTabs,
+  ElTabPane,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElCheckbox,
+  ElLink,
+  ElMenu,
+  ElSubMenu,
+  ElMenuItem,
+  ElContainer,
+  ElAside,
+  ElHeader,
+  ElMain,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElAvatar,
+  ElButtonGroup,
+  ElRow,
+  ElCol,
+  ElSelect,
+  ElOption,
+  ElDatePicker,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElTable,
+  ElTableColumn,
+  ElPagination,
+  ElConfigProvider,
+  ElDialog,
+  ElImage,
+  ElTree,
+  ElDescriptions,
+  ElDescriptionsItem,
+  ElTag,
+  ElCard,
+  ElTooltip
+]
+
+function registerElement(app: App): void {
+  for (const cpn of components) {
+    app.component(cpn.name, cpn)
+  }
+}
+
+export default registerElement
