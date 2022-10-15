@@ -1,23 +1,43 @@
 {
+  /* tsconfig.json文件 ---文档地址https://www.typescriptlang.org/zh/tsconfig#resolveJsonModule*/
+  //编译程序任选项
   "compilerOptions": {
+    //目标代码（ts->js(es5/6/7)）
     "target": "esnext",
+    //目标代码使用的模块化方案
     "module": "esnext",
+    //按照node的方式解析模块  import
     "moduleResolution": "node",
+    //严格模式检查
     "strict": true,
+    //要不要对jsx处理，怎样处理，preserve不转换
     "jsx": "preserve",
+    ///辅助导入功能
+    "importHelpers": true,
+    //跳过对一些库的类型检测
+    "skipLibCheck": true,
+    //生成映射文件
     "sourceMap": true,
+    //允许导入带有'的模块.Json的扩展
     "resolveJsonModule": true,
+    //开发中export default/module.export={}是否可以混合使用
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "lib": ["esnext", "dom"],
+    //可以指定在项目中可以使用哪些库的类型
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    //指定具体要解析使用的类型--一般使用默认
     "types": ["vite/client", "element-plus/global"],
+    //文件路径在解析时基本的url
     "baseUrl": ".",
+    //路径解析(类似于webpack中的alias配置别名)
     "paths": {
-      "/@/*": ["src/*"],
-      "views": ["src/views"]
+      "@/*": ["src/*"],
+      "views": ["src/views/*"],
+      "components/*": ["src/components/*"]
     }
-    // "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
+  //当前哪些ts代码需要编译解析
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  //当前哪些ts代码需要排除，引用的类型依然进行解析
   "exclude": ["node_modules"]
 }

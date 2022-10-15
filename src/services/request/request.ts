@@ -33,9 +33,8 @@ class HYRequest {
     //二：添加所有实例都有的拦截器（全局拦截）
     this.instance.interceptors.request.use(
       (config) => {
-        console.log('所有请求成功拦截')
+        // console.log('所有请求成功拦截')
         if (this.showLoading) {
-          console.log(1111)
           //根据showLoading来判断是否显示loading界面
           this.loading = ElLoading.service({
             lock: true,
@@ -51,11 +50,11 @@ class HYRequest {
     )
     this.instance.interceptors.response.use(
       (res) => {
-        console.log('所有响应成功拦截')
+        // console.log('所有响应成功拦截')
         this.loading?.close() //移除loading
         const data = res.data
         if (data.returnCode === '-1001') {
-          console.log('请求失败')
+          // console.log('请求失败')
         } else {
           return data
         }
@@ -71,7 +70,7 @@ class HYRequest {
   }
 
   //定义request请求方法
-  request<T>(config: HYRequestConfig): Promise<T> {
+  request<T>(config: HYRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       //三：单独请求的拦截器,对请求config的处理
       if (config.interceptors?.requestInterceptor) {
@@ -86,7 +85,7 @@ class HYRequest {
         .then((res) => {
           //1.单独响应的拦截器
           if (config.interceptors?.responseInterceptor) {
-            // res = config.interceptors.responseInterceptor(res)
+            res = config.interceptors.responseInterceptor(res)
           }
           this.showLoading = DEFAULT_LOADING //2.请求完成后设置成初始化值
           //3.将结果resolve返回出去
@@ -101,28 +100,28 @@ class HYRequest {
   }
 
   //get方法
-  get<T>(config: HYRequestConfig): Promise<T> {
+  get<T>(config: HYRequestConfig<T>): Promise<T> {
     return this.request<T>({
       ...config,
       method: 'GET'
     })
   }
   //post方法
-  post<T>(config: HYRequestConfig): Promise<T> {
+  post<T>(config: HYRequestConfig<T>): Promise<T> {
     return this.request<T>({
       ...config,
       method: 'POST'
     })
   }
   //delete方法
-  delete<T>(config: HYRequestConfig): Promise<T> {
+  delete<T>(config: HYRequestConfig<T>): Promise<T> {
     return this.request<T>({
       ...config,
       method: 'DELETE'
     })
   }
   //patch方法
-  patch<T>(config: HYRequestConfig): Promise<T> {
+  patch<T>(config: HYRequestConfig<T>): Promise<T> {
     return this.request<T>({
       ...config,
       method: 'PATCH'
