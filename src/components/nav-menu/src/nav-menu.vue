@@ -28,7 +28,7 @@
             </template>
             <!-- 遍历里面的item -->
             <template v-for="subItem in item.children" :key="subItem.id">
-              <el-menu-item :index="subItem.id + ''">
+              <el-menu-item :index="subItem.id + ''" @click="handleMenuItemClick(subItem)">
                 <i v-if="subItem.icon" :class="subItem.icon"></i>
                 <span>{{ subItem.name }}</span>
               </el-menu-item>
@@ -51,6 +51,8 @@
 import { useStore } from '@/store';
 import { Setting } from '@element-plus/icons-vue';
 import { computed, defineProps, toRefs } from 'vue';
+import { useRouter } from 'vue-router';
+
 const props = defineProps({
   collapse: {
     type: Boolean,
@@ -59,7 +61,14 @@ const props = defineProps({
 })
 const { collapse } = toRefs(props) //取出数据变成响应式
 const store = useStore()
+const router = useRouter()
 const userMenus = computed(() => store.state.login.userMenus)
+
+const handleMenuItemClick = (item: any) => {
+  router.push({
+    path: item.url ?? 'not-found'
+  })
+}
 </script>
 
 <style scoped lang="less">

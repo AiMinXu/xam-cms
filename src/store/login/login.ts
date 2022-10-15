@@ -1,5 +1,4 @@
 import router from '@/router'
-// import router from '@/router'
 import {
   accountLoginRequest,
   userInfoByIdRequest,
@@ -32,10 +31,12 @@ const loginModule: Module<ILoginState, IRootState> = {
     },
     changeUserMenus(state, userMenus: any) {
       state.userMenus = userMenus
-
       //userMenus映射到routes
-      mapMenusToRoutes(userMenus)
+      const routes = mapMenusToRoutes(userMenus)
       //将routes=>router.main.children
+      routes.forEach((route) => {
+        router.addRoute('main', route) //动态添加路由,参数name（'main'）对应的名称，会将路由动态的添加到该路由下，形成子路由
+      })
     }
   },
   actions: {
