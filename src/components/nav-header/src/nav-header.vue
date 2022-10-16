@@ -13,7 +13,7 @@
 import breadcrumb from '@/base-ui/breadcrumb'
 import { pathMapBreadcrumbs } from '@/utils/map-menus'
 import { Expand, Fold } from '@element-plus/icons-vue'
-import { computed, defineEmits, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import UserInfo from './user-info.vue'

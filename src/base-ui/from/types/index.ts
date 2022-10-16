@@ -6,7 +6,7 @@ interface ISelectOption {
 type ItemType = 'input' | 'password' | 'select' | 'datepicker'
 
 export interface IFromItem {
-  // field: string
+  field: string
   type: ItemType
   label: string
   placeholder?: string
