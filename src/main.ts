@@ -14,7 +14,7 @@ const app = createApp(App)
 // app.use(createPinia())
 // registerApp(app)
 app.use(registerApp) //使用app.use方式注册组件
-app.use(router)
 app.use(store)
-setupStore()
+setupStore() //先回调后匹配动态路由
+app.use(router)
 app.mount('#app')

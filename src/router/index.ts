@@ -1,4 +1,5 @@
 import localCache from '@/utils/cache'
+import { firstMenu } from '@/utils/map-menus'
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -38,6 +39,11 @@ router.beforeEach((to) => {
     if (!token) {
       return '/login'
     }
+  }
+
+  //匹配到main时重定向到第一个匹配到的url（核心技术）
+  if (to.path === '/main') {
+    return firstMenu.url
   }
 })
 

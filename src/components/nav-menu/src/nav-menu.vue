@@ -6,7 +6,7 @@
     </div>
 
     <el-menu
-      default-active="2"
+      :default-active="defaultValue"
       class="el-menu-vertical"
       :unique-opened="false"
       :collapse="collapse"
@@ -49,20 +49,24 @@
 
 <script setup lang="ts">
 import { useStore } from '@/store';
+import { pathMapToMenu } from '@/utils/map-menus';
 import { Setting } from '@element-plus/icons-vue';
-import { computed, defineProps, toRefs } from 'vue';
-import { useRouter } from 'vue-router';
-
+import { computed, defineProps, ref, toRefs } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 const props = defineProps({
   collapse: {
     type: Boolean,
     default: false
   }
 })
-const { collapse } = toRefs(props) //取出数据变成响应式
 const store = useStore()
 const router = useRouter()
+const route = useRoute()
+const { collapse } = toRefs(props) //取出数据变成响应式
 const userMenus = computed(() => store.state.login.userMenus)
+const currentPath = route.path
+const menu = pathMapToMenu(userMenus.value,currentPath)//computed取到的是ref对象需要点value取值
+const defaultValue = ref(menu.id + '')
 
 const handleMenuItemClick = (item: any) => {
   router.push({
