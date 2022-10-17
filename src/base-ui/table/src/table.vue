@@ -126,7 +126,7 @@ const handleCurrentChange = (currentPage: number) => {
   margin-top: 15px;
 
   .el-pagination {
-    text-align: right;
+    justify-content: flex-end;
   }
 }
 </style>
