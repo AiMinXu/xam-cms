@@ -70,7 +70,7 @@ class HYRequest {
   }
 
   //定义request请求方法
-  request<T>(config: HYRequestConfig<T>): Promise<T> {
+  request<T = any>(config: HYRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       //三：单独请求的拦截器,对请求config的处理
       if (config.interceptors?.requestInterceptor) {
@@ -100,28 +100,28 @@ class HYRequest {
   }
 
   //get方法
-  get<T>(config: HYRequestConfig<T>): Promise<T> {
+  get<T = any>(config: HYRequestConfig<T>): Promise<T> {
     return this.request<T>({
       ...config,
       method: 'GET'
     })
   }
   //post方法
-  post<T>(config: HYRequestConfig<T>): Promise<T> {
+  post<T = any>(config: HYRequestConfig<T>): Promise<T> {
     return this.request<T>({
       ...config,
       method: 'POST'
     })
   }
   //delete方法
-  delete<T>(config: HYRequestConfig<T>): Promise<T> {
+  delete<T = any>(config: HYRequestConfig<T>): Promise<T> {
     return this.request<T>({
       ...config,
       method: 'DELETE'
     })
   }
   //patch方法
-  patch<T>(config: HYRequestConfig<T>): Promise<T> {
+  patch<T = any>(config: HYRequestConfig<T>): Promise<T> {
     return this.request<T>({
       ...config,
       method: 'PATCH'

@@ -1,19 +1,14 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <el-config-provider :locale="zhCn">
+      <router-view></router-view>
+    </el-config-provider>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'; //elm-plus国际化设置
 
-export default defineComponent({
-  name: 'App',
-  components: {},
-  setup() {
-    return {}
-  }
-})
 </script>
 
 <style scoped>
