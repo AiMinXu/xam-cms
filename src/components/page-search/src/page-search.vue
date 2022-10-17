@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import HyForm from '@/base-ui/from';
+import HyForm from '@/base-ui/form';
 import { RefreshRight, Search } from '@element-plus/icons-vue';
 import { ref } from 'vue';
 
