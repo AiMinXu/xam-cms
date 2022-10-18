@@ -77,26 +77,30 @@ const systemModule: Module<ISystemState, IRootState> = {
       //获取Url
       const pageName = payload.pageName
 
-      //const pageUrl = `/${pageName}/list` //可以直接拼接
-      if (pageName.length === 0) return
-      let pageUrl = '' //为了使封装更具有通用性
-      switch (pageName) {
-        case 'users':
-          pageUrl = '/users/list'
-          break
-        case 'role':
-          pageUrl = '/role/list'
-          break
-        default:
-          break
-      }
+      const pageUrl = `/${pageName}/list` //优化：可以直接拼接
+      // if (pageName.length === 0) return
+      // let pageUrl = '' //为了使封装更具有通用性
+      // switch (pageName) {
+      //   case 'users':
+      //     pageUrl = '/users/list'
+      //     break
+      //   case 'role':
+      //     pageUrl = '/role/list'
+      //     break
+      //   default:
+      //     break
+      // }
       const queryInfo = payload.queryInfo
       //发送请求
       const pageRes = await getPageList(pageUrl, queryInfo)
 
       //处理请求数据，存储到state中
       const { list, totalCount } = pageRes.data
-      // console.log(list, totalCount)
+      //方法一
+      // const changePageName = pageName.slice(0, 1).toUpperCase() + pageName.slice(1)//数据处理
+      // commit(`change${changePageName}List`,list)
+      // commit(`change${changePageName}totalCount`,totalCount)
+      //方法二
       switch (pageName) {
         case 'users':
           commit('changeUsersTotalCount', totalCount)

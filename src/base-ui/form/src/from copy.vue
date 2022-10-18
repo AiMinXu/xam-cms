@@ -1,3 +1,4 @@
+<!-- //第二种做法直接绑定modelValue -->
 <template>
   <div class="hy-from">
     <div class="header">
@@ -13,7 +14,8 @@
                   :placeholder="item.placeholder"
                   :show-password="item.type === 'password'"
                   v-bind="item.otherOptions"
-                  v-model="formData[`${item.field}`]"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:model-value="handleValueChange($event, item.field)"
                 />
               </template>
               <template v-else-if="item.type === 'select'">
@@ -21,7 +23,8 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   style="width: 100%"
-                  v-model="formData[`${item.field}`]"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:model-value="handleValueChange($event, item.field)"
                 >
                   <el-option
                     v-for="option in item.options"
@@ -35,7 +38,8 @@
                 <el-date-picker
                   v-bind="item.otherOptions"
                   style="width: 100%"
-                  v-model="formData[`${item.field}`]"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:model-value="handleValueChange($event, item.field)"
                 ></el-date-picker>
               </template>
             </el-form-item>
@@ -50,12 +54,12 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, PropType, ref, watch } from 'vue';
+import { defineProps, PropType } from 'vue';
 import { IFromItem } from '../types';
-
 const props = defineProps({
   modelValue: {
-    type: Object
+    type: Object,
+    required: true
   },
   formItems: {
     type: Array as PropType<IFromItem[]>, //明确数组类型
@@ -81,18 +85,19 @@ const props = defineProps({
     })
   }
 })
-
 const emit = defineEmits(['update:modelValue']) //emit使用
-const formData = ref({ ...props.modelValue }) //将原来的对象进行浅拷贝了一份放入新对象中用作初始化---类似于react中浅拷贝数据，数据不可变性（immutable）
-watch(
-  //监听属性
-  formData,
-  (newValue) => {
-    emit('update:modelValue', newValue)//发送事件update:modelValue自带事件
-  },
-  { deep: true }//开启深度监听
-)
-
+// const formData = ref({ ...props.moduleValue }) //将原来的对象进行浅拷贝了一份放入新对象中用作初始化---类似于react中浅拷贝数据，数据不可变性（immutable）
+// watch(
+//   //监听属性
+//   formData,
+//   (newValue) => {
+//     emit('update:modelValue', newValue)//发送事件update:modelValue自带事件
+//   },
+//   { deep: true }//开启深度监听
+// )
+const handleValueChange = (value: any, flied: string) => {
+  emit('update:modelValue', { ...props.modelValue, [flied]: value }) //此处也需要解构传出，[flied]作为key，是键值对格式
+}
 </script>
 
 <style scoped lang="less">

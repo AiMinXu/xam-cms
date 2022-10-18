@@ -60,18 +60,28 @@ const props = defineProps({
 })
 
 const store = useStore()
-//发送请求
-store.dispatch('system/getPageListDataAction', {
-  pageName: props.pageName,
-  queryInfo: {
-    offset: 0,
-    size: 10
-  }
-})
-//获取页面数据
+//发送网络请求，获取原始数据展示
+const getPageData = (queryInfo: any = {}) => {
+  store.dispatch('system/getPageListDataAction', {
+    pageName: props.pageName,
+    queryInfo: {
+      offset: 0,
+      size: 10,
+      ...queryInfo//查询条件
+    }
+  })
+}
+getPageData()
+
+//从vuex中获取页面数据
 const pageListData = computed(() => store.getters['system/pageListData'](props.pageName)) //拿到的getter本身是一个函数，需要调用以获取当前页面的数据
 
 // const userTotalCount = computed(() => store.state.system.usersTotalCount)
+
+//导出方法
+defineExpose({
+  getPageData
+})
 </script>
 
 <style scoped>

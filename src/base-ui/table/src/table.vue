@@ -107,8 +107,8 @@ const handleCurrentChange = (currentPage: number) => {
 <style scoped lang="less">
 .header {
   display: flex;
-  height: 45px;
-  padding: 0 5px;
+  height: 50px;
+  padding: 0 5px 10px;
   justify-content: space-between;
   align-items: center;
 
