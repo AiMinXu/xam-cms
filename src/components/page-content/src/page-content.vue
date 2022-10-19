@@ -9,7 +9,7 @@
       >
         <!-- header插槽 -->
         <template #headerHandler>
-          <el-button type="primary">新建用户</el-button>
+          <el-button v-if="isCreate" type="primary">{{contentTableConfig.newBtnTitle ??'新建数据'}}</el-button>
         </template>
 
         <!-- 列里面的插槽 -->
@@ -26,13 +26,13 @@
         </template>
         <template #handler>
           <div class="handle-btns">
-            <el-button size="small" text type="primary">
+            <el-button size="small" type="primary" v-if="isUpdate">
               <span>
                 <el-icon><EditPen /></el-icon>
                 编辑
               </span>
             </el-button>
-            <el-button size="small" text type="primary">
+            <el-button size="small" type="danger" v-if="isDelete">
               <span>
                 <el-icon><Delete /></el-icon>
                 删除
@@ -41,6 +41,12 @@
           </div>
         </template>
 
+        <!-- 动态插槽 -->
+        <template v-for="item in otherPropSlots" :key="item.prop" #item.slotName="scope">
+          <template v-if="item.slotName">
+            <slot :name="item.slotName" :row="scope.row"></slot>
+          </template>
+        </template>
         <!-- footer插槽 -->
       </hy-table>
     </div>
@@ -48,10 +54,11 @@
 </template>
 
 <script setup lang="ts">
-import HyTable from '@/base-ui/table';
-import { useStore } from '@/store';
-import { Delete, EditPen } from '@element-plus/icons-vue';
-import { computed, ref, watch } from 'vue';
+import HyTable from '@/base-ui/table'
+import { usePermission } from '@/hooks/usePermission'
+import { useStore } from '@/store'
+import { Delete, EditPen } from '@element-plus/icons-vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
   contentTableConfig: {
@@ -62,22 +69,26 @@ const props = defineProps({
     type: String,
     required: true
   }
-  // totalCount: {
-  //   type:Number
-  // }
 })
 
-//双向绑定pageInfo，并监听获取最新数据
+//0.获取页面操作的权限
+const isCreate = usePermission(props.pageName, 'create') //创建权限
+const isUpdate = usePermission(props.pageName, 'create') //更新编辑权限
+const isDelete = usePermission(props.pageName, 'delete') //删除权限
+const isQuery = usePermission(props.pageName, 'query') //请求数据权限
+
+//1.双向绑定pageInfo，并监听获取最新数据
 const pageInfo = ref({ currentPage: 1, pageSize: 10 })
 watch(pageInfo, () => getPageData())
 
+//发2.送网络请求，获取原始数据展示
 const store = useStore()
-//发送网络请求，获取原始数据展示
 const getPageData = (queryInfo: any = {}) => {
+  if (!isQuery) return //有无权限
   store.dispatch('system/getPageListDataAction', {
     pageName: props.pageName,
     queryInfo: {
-      offset: pageInfo.value.currentPage * pageInfo.value.pageSize,
+      offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
       size: pageInfo.value.pageSize,
       ...queryInfo //查询条件
     }
@@ -85,20 +96,45 @@ const getPageData = (queryInfo: any = {}) => {
 }
 getPageData()
 
-//从vuex中获取页面数据
+//3.从vuex中获取页面数据
 const pageListData = computed(() => store.getters['system/pageListData'](props.pageName)) //拿到的getter本身是一个函数，需要调用以获取当前页面的数据
 
 const totalCount = computed(() => store.getters['system/pageListCount'](props.pageName)) //拿到dataCount
 
+//4.获取其他的动态插槽
+// const otherPropSlots = computed(() => {
+//   props.contentTableConfig.propList.filter((item:any) => {
+//     if (item.slotName === 'status') return false
+//     else if (item.slotName === 'create') return false
+//     else if (item.slotName === 'update') return false
+//     else if (item.slotName === 'handler') return false
+//     return true
+//   })
+// })
+const otherPropSlots = props.contentTableConfig?.propList.filter((item: any) => {
+  if (item.slotName === 'status') return false
+  else if (item.slotName === 'create') return false
+  else if (item.slotName === 'update') return false
+  else if (item.slotName === 'handler') return false
+  return true
+})
+
 //导出方法
 defineExpose({
-  getPageData
+  getPageData,
+  isCreate,
+  isUpdate,
+  isDelete
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .page-content {
   padding: 20px;
   border-top: 20px solid #f5f5f5;
+  .handle-btns {
+    display: flex;
+    justify-content: center;
+  }
 }
 </style>

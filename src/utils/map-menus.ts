@@ -90,7 +90,7 @@ export function mapPathToBreadpaths(currentPath: string, userMenus: any[]) {
     }
   }
 
-  _recurseGetPath(userMenus)
+  _recurseGetPath(userMenus) //调用函数
 
   return breadPaths.reverse()
 }
@@ -99,6 +99,24 @@ export function pathMapBreadcrumbs(userMenus: any[], currentPath: string) {
   const breadcrumbs: IBreadcrumb[] = []
   pathMapToMenu(userMenus, currentPath, breadcrumbs)
   return breadcrumbs
+}
+
+export function mapMenusToPermissions(userMenus: any[]) {
+  const permissions: string[] = []
+  //递归实现
+  const _recurseGetPermission = (menus: any[]) => {
+    for (const menu of menus) {
+      if (menu.type === 1 || menu.type === 2) {
+        _recurseGetPermission(menu.children ?? [])
+      }
+      if (menu.type === 3) {
+        permissions.push(menu.permission)
+      }
+    }
+  }
+
+  _recurseGetPermission(userMenus) //调用函数
+  return permissions
 }
 
 export { firstMenu, firstRoute }

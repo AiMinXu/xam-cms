@@ -8,7 +8,13 @@
         </div>
       </slot>
     </div>
-    <el-table :data="listData" border style="width: 100%" @selection-change="handleSelectionChange" :totalCount="totalCount">
+    <el-table
+      :data="listData"
+      border
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+      v-bind="childrenProps"
+    >
       <el-table-column
         v-if="showSelectColumn"
         type="selection"
@@ -22,8 +28,8 @@
         align="center"
         width="80"
       ></el-table-column>
-      <template v-for="propItem in propList" :key="propItem.label">
-        <el-table-column v-bind="propItem" align="center">
+      <template v-for="propItem in propList" :key="propItem.prop">
+        <el-table-column v-bind="propItem" align="center" show-overflow-tooltip>
           <!-- 此处做作用域插槽 -->
           <template #default="scope">
             <!-- 具名插槽，且propItem.slotName动态设置插槽的名字,并且将scope.row传到上一层 -->
@@ -33,9 +39,9 @@
           </template>
         </el-table-column>
       </template>
-      <slot></slot>
+      <!-- <slot></slot> -->
     </el-table>
-    <div class="footer">
+    <div class="footer" v-if="showFooter">
       <slot name="footer">
         <el-pagination
           @size-change="handleSizeChange"
@@ -88,6 +94,15 @@ const props = defineProps({
       currentPage: 0,
       pageSize: 10
     })
+  },
+  childrenProps: {
+    //通过v-bind绑定从配置中传入的属性，显示table展开
+    type: Object,
+    default: () => ({})
+  },
+  showFooter: {
+    type: Boolean,
+    default: true
   }
 })
 const emit = defineEmits(['selectionChange', 'update:page'])
