@@ -70,6 +70,12 @@ const systemModule: Module<ISystemState, IRootState> = {
         const ListData: any[] = (state as any)[`${pageName}List`] ?? []
         return ListData
       }
+    },
+    pageListCount(state) {
+      //动态获取不同页面的总数据个数
+      return (pageName: string) => {
+        return (state as any)[`${pageName}TotalCount`]
+      }
     }
   },
   actions: {

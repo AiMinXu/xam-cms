@@ -8,7 +8,7 @@
         </div>
       </slot>
     </div>
-    <el-table :data="listData" border style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table :data="listData" border style="width: 100%" @selection-change="handleSelectionChange" :totalCount="totalCount">
       <el-table-column
         v-if="showSelectColumn"
         type="selection"
@@ -95,6 +95,7 @@ const handleSelectionChange = (value: any) => {
   console.log(value)
   emit('selectionChange', value)
 }
+//改变page的方法
 const handleSizeChange = (pageSize: number) => {
   emit('update:page', { ...props.page, pageSize })
 }

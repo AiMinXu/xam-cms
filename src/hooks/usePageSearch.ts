@@ -14,5 +14,5 @@ export function usePageSearch() {
     pageContentRef.value?.getPageData(queryInfo) //调用pageContent中的getPageData函数并传入queryInfo参数，发送请求获取相应页面数据
   }
 
-  return { pageContentRef, handleResetClick, handleQueryClick } //k看成是一个元组
+  return { pageContentRef, handleResetClick, handleQueryClick } //使用[ ]可以看成是一个元组
 }
