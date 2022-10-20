@@ -5,7 +5,7 @@ interface ISelectOption {
 
 type ItemType = 'input' | 'password' | 'select' | 'datepicker'
 
-export interface IFromItem {
+export interface IFormItem {
   field: string
   type: ItemType
   label: string
@@ -19,7 +19,7 @@ export interface IFromItem {
 
 export interface IForm {
   title?: string
-  formItems?: IFromItem[]
+  formItems?: IFormItem[]
   labelWidth?: string
   itemStyle: any
   colLayout: any
