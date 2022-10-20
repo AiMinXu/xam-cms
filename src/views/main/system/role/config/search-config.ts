@@ -12,8 +12,8 @@ export const searchFormConfig: IForm = {
     {
       field: 'intro',
       type: 'input',
-      label: '权限介绍',
-      placeholder: '请输入权限介绍',
+      label: '角色权限',
+      placeholder: '请输入角色权限',
       rules: []
     },
     {

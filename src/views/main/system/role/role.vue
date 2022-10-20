@@ -1,15 +1,61 @@
 <template>
   <div class="role">
-    <page-search :searchFormConfig="searchFormConfig" />
-    <page-content :contentTableConfig="contentTableConfig" pageName="role"/>
+    <page-search
+      :searchFormConfig="searchFormConfig"
+      @resetBtnClick="handleResetClick"
+      @queryBtnClick="handleQueryClick"
+    />
+    <page-content
+      :contentTableConfig="contentTableConfig"
+      pageName="role"
+      ref="pageContentRef"
+      @newBtnClick="handleNewDataClick"
+      @editBtnClick="handleEditClick"
+    />
+    <page-modal
+      ref="pageModalRef"
+      :modalConfig="modalConfig"
+      :defaultInfo="defaultInfo"
+      pageName="role"
+    >
+      <el-tree class="menu-tree" />
+    </page-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
-import PageContent from '@/components/page-content';
-import PageSearch from '@/components/page-search';
-import { contentTableConfig } from './config/content-config';
-import { searchFormConfig } from './config/search-config';
+import PageContent from '@/components/page-content'
+import PageModal from '@/components/page-modal'
+import PageSearch from '@/components/page-search'
+import { usePageModal } from '@/hooks/usePageModal'
+import { usePageSearch } from '@/hooks/usePageSearch'
+import { useStore } from '@/store'
+import { ElTree } from 'element-plus'
+import { computed, ref } from 'vue'
+import { contentTableConfig } from './config/content-config'
+import { modalConfig } from './config/modal-config'
+import { searchFormConfig } from './config/search-config'
+
+const store = useStore()
+// pageSearch处理hook
+const { pageContentRef, handleQueryClick, handleResetClick } = usePageSearch()
+
+// ElTree的处理逻辑
+const elTreeRef = ref<InstanceType<typeof ElTree>>()
+const editCallback: any = (item: any) => {}
+// pageModal的hook
+const { defaultInfo, pageModalRef, handleEditClick, handleNewDataClick } = usePageModal(
+  undefined,
+  editCallback
+)
+// pageModal的额外参数menuList
+const otherInfo = ref({})
+
+const roleMenus = computed(() => store.state.entireMenus)
 </script>
 
-<style scoped></style>
+<style scoped lang="less">
+.menu-tree {
+  margin-left: 25px;
+}
+</style>
