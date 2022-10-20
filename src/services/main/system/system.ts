@@ -14,7 +14,7 @@ export function deletePageData(pageUrl: string) {
   })
 }
 
-export function newPageData(pageUrl: string, newData: any) {
+export function createPageData(pageUrl: string, newData: any) {
   return hyRequest.post({
     url: pageUrl,
     data: newData

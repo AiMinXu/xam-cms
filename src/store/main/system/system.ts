@@ -1,4 +1,9 @@
-import { deletePageData, getPageList } from '@/services/main/system/system'
+import {
+  createPageData,
+  deletePageData,
+  editPageData,
+  getPageList
+} from '@/services/main/system/system'
 import { Module } from 'vuex'
 import { IRootState } from '../../types'
 import { ISystemState } from './types'
@@ -139,14 +144,29 @@ const systemModule: Module<ISystemState, IRootState> = {
       }
     },
     //删除操作
-    async deletePageDataAction(context, payload: any) {
+    async deletePageDataAction({ dispatch }, payload: any) {
       //1.pageName-> /users/用于拼接，2.id
       const { pageName, id } = payload
       const pageUrl = `/${pageName}/${id}`
       //发送网络请求
       await deletePageData(pageUrl)
       //请求最新数据
-      context.dispatch('getPageListDataAction', { pageName, queryInfo: { offset: 0, size: 10 } })
+      dispatch('getPageListDataAction', { pageName, queryInfo: { offset: 0, size: 10 } })
+    },
+    //创建操作
+    async createPageDataAction({ dispatch }, payload: any) {
+      const { pageName, newData } = payload
+      const pageUrl = `/${pageName}`
+      await createPageData(pageUrl, newData)
+      dispatch('getPageListDataAction', { pageName, queryInfo: { offset: 0, size: 10 } })
+    },
+    //修改操作
+    async editPageDataAction({ dispatch }, payload: any) {
+      if (!payload.id) return
+      const { pageName, editData, id } = payload
+      const pageUrl = `/${pageName}/${id}`
+      await editPageData(pageUrl, editData)
+      dispatch('getPageListDataAction', { pageName, queryInfo: { offset: 0, size: 10 } })
     }
   }
 }

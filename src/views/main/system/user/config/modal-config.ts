@@ -9,7 +9,7 @@ export const modalConfig: IForm = {
       type: 'input',
       label: '真实姓名',
       placeholder: '请输入真实姓名',
-      rules: [{ required: true }]
+      rules: []
     },
     {
       field: 'password',

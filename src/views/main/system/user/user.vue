@@ -16,6 +16,7 @@
       ref="pageModalRef"
       :modalConfig="modalConfigRef"
       :defaultInfo="defaultInfo"
+      pageName="users"
     ></page-modal>
   </div>
 </template>
@@ -43,8 +44,11 @@ const newCallback = () => {
   pswItem!.isHidden = false
 }
 const editCallback = () => {
-  const pswItem = modalConfig.formItems.find((item) => item.field === 'password')
-  pswItem!.isHidden = true
+  if (modalConfig) {
+
+    const pswItem = modalConfig.formItems.find((item) => item.field === 'password')
+    pswItem!.isHidden = true
+  }
 }
 //2.动态添加部门/角色列表数据
 const modalConfigRef = computed(() => {
