@@ -3,6 +3,13 @@ import { IForm } from '@/base-ui/form'
 export const searchFormConfig: IForm = {
   formItems: [
     {
+      field: 'id',
+      type: 'input',
+      label: 'id',
+      placeholder: '请输入id',
+      rules: []
+    },
+    {
       field: 'name',
       type: 'input',
       label: '用户名',

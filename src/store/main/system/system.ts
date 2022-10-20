@@ -1,4 +1,4 @@
-import { getPageList } from '@/services/main/system/system'
+import { deletePageData, getPageList } from '@/services/main/system/system'
 import { Module } from 'vuex'
 import { IRootState } from '../../types'
 import { ISystemState } from './types'
@@ -79,7 +79,8 @@ const systemModule: Module<ISystemState, IRootState> = {
     }
   },
   actions: {
-    async getPageListDataAction({ commit }, payload: any) {
+    //获取页面数据操作
+    async getPageListDataAction({ commit, dispatch }, payload: any) {
       //获取Url
       const pageName = payload.pageName
 
@@ -136,6 +137,16 @@ const systemModule: Module<ISystemState, IRootState> = {
           commit('changeStoryList', list)
           break
       }
+    },
+    //删除操作
+    async deletePageDataAction(context, payload: any) {
+      //1.pageName-> /users/用于拼接，2.id
+      const { pageName, id } = payload
+      const pageUrl = `/${pageName}/${id}`
+      //发送网络请求
+      await deletePageData(pageUrl)
+      //请求最新数据
+      context.dispatch('getPageListDataAction', { pageName, queryInfo: { offset: 0, size: 10 } })
     }
   }
 }

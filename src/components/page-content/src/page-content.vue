@@ -9,7 +9,9 @@
       >
         <!-- header插槽 -->
         <template #headerHandler>
-          <el-button v-if="isCreate" type="primary">{{contentTableConfig.newBtnTitle ??'新建数据'}}</el-button>
+          <el-button v-if="isCreate" type="primary" @click="handleNewClick">{{
+            contentTableConfig.newBtnTitle ?? '新建数据'
+          }}</el-button>
         </template>
 
         <!-- 列里面的插槽 -->
@@ -24,15 +26,25 @@
         <template #update="scope">
           <span> {{ $filters.formatTime(scope.row.updateAt) }}</span>
         </template>
-        <template #handler>
+        <template #handler="scope">
           <div class="handle-btns">
-            <el-button size="small" type="primary" v-if="isUpdate">
+            <el-button
+              size="small"
+              type="primary"
+              v-if="isUpdate"
+              @click="handleEditClick(scope.row)"
+            >
               <span>
                 <el-icon><EditPen /></el-icon>
                 编辑
               </span>
             </el-button>
-            <el-button size="small" type="danger" v-if="isDelete">
+            <el-button
+              size="small"
+              type="danger"
+              v-if="isDelete"
+              @click="handleDeleteClick(scope.row)"
+            >
               <span>
                 <el-icon><Delete /></el-icon>
                 删除
@@ -70,7 +82,7 @@ const props = defineProps({
     required: true
   }
 })
-
+const emit = defineEmits(['newBtnClick', 'editBtnClick'])
 //0.获取页面操作的权限
 const isCreate = usePermission(props.pageName, 'create') //创建权限
 const isUpdate = usePermission(props.pageName, 'create') //更新编辑权限
@@ -96,7 +108,7 @@ const getPageData = (queryInfo: any = {}) => {
 }
 getPageData()
 
-//3.从vuex中获取页面数据
+//3.从vuex中获取页面数据---使用store有作用域，需要加‘system/’
 const pageListData = computed(() => store.getters['system/pageListData'](props.pageName)) //拿到的getter本身是一个函数，需要调用以获取当前页面的数据
 
 const totalCount = computed(() => store.getters['system/pageListCount'](props.pageName)) //拿到dataCount
@@ -119,6 +131,16 @@ const otherPropSlots = props.contentTableConfig?.propList.filter((item: any) => 
   return true
 })
 
+//按钮操作
+const handleDeleteClick = (item: any) => {
+  store.dispatch('system/deletePageDataAction', { pageName: props.pageName, id: item.id })
+}
+const handleNewClick = () => {
+  emit('newBtnClick')
+}
+const handleEditClick = (item: any) => {
+  emit('editBtnClick', item)
+}
 //导出方法
 defineExpose({
   getPageData,
