@@ -45,12 +45,15 @@ const loginModule: Module<ILoginState, IRootState> = {
   },
   actions: {
     //登录验证逻辑
-    async accountLoginAction({ commit }, payload: IAccount) {
+    async accountLoginAction({ commit, dispatch }, payload: IAccount) {
       //1.实现登录逻辑
       const loginResult = await accountLoginRequest(payload)
       const { id, token } = loginResult.data
       commit('changeToken', token) //提交mutation,并携带参数
       localCache.setCache('token', token) //token本地缓存
+
+      //发送初始化请求（完整的role/department/menu）
+      dispatch('getInitialDataAction', null, { root: true }) //调用根的action
 
       //2.请求用户信息
       const userInfoRes = await userInfoByIdRequest(id)
@@ -71,10 +74,12 @@ const loginModule: Module<ILoginState, IRootState> = {
       console.log('phoneLoginAction', payload)
     },
     //每次刷新页面时都会调用该方法，保证存储中有相应数据，且保证vuex中有相应数据
-    loadLocalLogin({ commit }) {
+    loadLocalLogin({ commit, dispatch }) {
       const token = localCache.getCache('token')
       if (token) {
         commit('changeToken', token)
+        //发送初始化请求（完整的role/department/menu）
+        dispatch('getInitialDataAction', null, { root: true }) //调用根的action
       }
       const userInfo = localCache.getCache('userInfo')
       if (userInfo) {

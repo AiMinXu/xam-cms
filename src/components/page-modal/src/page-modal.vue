@@ -54,8 +54,6 @@ const handleConfirmClick = () => {
   //新建defaultInfo为空对象，编辑按钮defaultInfo有值
   if (Object.keys( props.defaultInfo).length) {
     //编辑
-    console.log(formData.value);
-
     store.dispatch('system/editPageDataAction', { pageName: props.pageName, editData: { ...formData.value,...props.otherInfo }, id: props.defaultInfo.id })
   }else{
     //新建

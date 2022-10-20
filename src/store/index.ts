@@ -48,7 +48,7 @@ const store = createStore<IRootState>({
 
 export function setupStore() {
   store.dispatch('login/loadLocalLogin')
-  store.dispatch('getInitialDataAction') //初始化调用
+  //store.dispatch('getInitialDataAction') //初始化调用---不要在这里调用因为请求是异步的可能token还没拿到
 }
 
 //解决ts根据vuex无法提示问题
