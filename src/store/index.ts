@@ -10,7 +10,7 @@ const store = createStore<IRootState>({
       name: 'xam',
       entireRoles: [], //全部角色
       entireDepartments: [], //全部部门
-      entireMenus: []
+      entireMenus: [] //全部菜单
     }
   },
   mutations: {

@@ -17,8 +17,17 @@
       :modalConfig="modalConfig"
       :defaultInfo="defaultInfo"
       pageName="role"
+      :otherInfo="otherInfo"
     >
-      <el-tree class="menu-tree" />
+      <el-tree
+        class="menu-tree"
+        ref="elTreeRef"
+        show-checkbox
+        :data="entireMenus"
+        node-key="id"
+        :props="{ label: 'name', children: 'children' }"
+        @check="handleCheckChange"
+      />
     </page-modal>
   </div>
 </template>
@@ -30,8 +39,9 @@ import PageSearch from '@/components/page-search'
 import { usePageModal } from '@/hooks/usePageModal'
 import { usePageSearch } from '@/hooks/usePageSearch'
 import { useStore } from '@/store'
+import { mapMenuLeafKeys } from '@/utils/map-menus'
 import { ElTree } from 'element-plus'
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { contentTableConfig } from './config/content-config'
 import { modalConfig } from './config/modal-config'
 import { searchFormConfig } from './config/search-config'
@@ -39,10 +49,14 @@ import { searchFormConfig } from './config/search-config'
 const store = useStore()
 // pageSearch处理hook
 const { pageContentRef, handleQueryClick, handleResetClick } = usePageSearch()
-
 // ElTree的处理逻辑
 const elTreeRef = ref<InstanceType<typeof ElTree>>()
-const editCallback: any = (item: any) => {}
+const editCallback: any = (item: any) => {
+  nextTick(() => {
+    const leafKeys = mapMenuLeafKeys(item.menuList)
+    elTreeRef.value?.setCheckedKeys(leafKeys, true)
+  })
+}
 // pageModal的hook
 const { defaultInfo, pageModalRef, handleEditClick, handleNewDataClick } = usePageModal(
   undefined,
@@ -50,8 +64,14 @@ const { defaultInfo, pageModalRef, handleEditClick, handleNewDataClick } = usePa
 )
 // pageModal的额外参数menuList
 const otherInfo = ref({})
-
-const roleMenus = computed(() => store.state.entireMenus)
+const handleCheckChange = (data1: any, data2: any) => {
+  const checkedKeys = data2.checkedKeys
+  const halfCheckedKeys = data2.halfCheckedKeys
+  const menuList = [...checkedKeys, ...halfCheckedKeys]
+  otherInfo.value = { menuList }
+}
+const entireMenus = computed(() => store.state.entireMenus)
+// console.log(entireMenus);
 </script>
 
 <style scoped lang="less">
