@@ -54,11 +54,20 @@
         </template>
 
         <!-- 动态插槽 -->
-        <template v-for="item in otherPropSlots" :key="item.prop" #item.slotName="scope">
+        <template v-for="item in otherPropSlots" :key="item.prop" #[item.slotName]="scope">
           <template v-if="item.slotName">
             <slot :name="item.slotName" :row="scope.row"></slot>
           </template>
         </template>
+        <!-- <template #imageSlot="scope">
+          <el-image
+            style="width: 50px; height: 50px"
+            :src="scope.row.imgUrl"
+            :preview-src-list="[scope.row.imgUrl]"
+            preview-teleported
+          >
+          </el-image>
+        </template> -->
         <!-- footer插槽 -->
       </hy-table>
     </div>
@@ -114,22 +123,24 @@ const pageListData = computed(() => store.getters['system/pageListData'](props.p
 const totalCount = computed(() => store.getters['system/pageListCount'](props.pageName)) //拿到dataCount
 
 //4.获取其他的动态插槽
-// const otherPropSlots = computed(() => {
-//   props.contentTableConfig.propList.filter((item:any) => {
-//     if (item.slotName === 'status') return false
-//     else if (item.slotName === 'create') return false
-//     else if (item.slotName === 'update') return false
-//     else if (item.slotName === 'handler') return false
-//     return true
-//   })
-// })
-const otherPropSlots = props.contentTableConfig?.propList.filter((item: any) => {
-  if (item.slotName === 'status') return false
-  else if (item.slotName === 'create') return false
-  else if (item.slotName === 'update') return false
-  else if (item.slotName === 'handler') return false
-  return true
+const otherPropSlots = computed(() => {//---用了computed就没有数据了
+  return props.contentTableConfig.propList.filter((item: any) => {
+    if (item.slotName === 'status') return false
+    else if (item.slotName === 'create') return false
+    else if (item.slotName === 'update') return false
+    else if (item.slotName === 'handler') return false
+    return true
+  })
 })
+
+// const otherPropSlots = props.contentTableConfig?.propList.filter((item: any) => {
+//   if (item.slotName === 'status') return false
+//   else if (item.slotName === 'create') return false
+//   else if (item.slotName === 'update') return false
+//   else if (item.slotName === 'handler') return false
+//   return true
+// })
+// console.log(otherPropSlots.value);
 
 //按钮操作
 const handleDeleteClick = (item: any) => {
