@@ -40,13 +40,13 @@ const { pageContentRef, handleResetClick, handleQueryClick } = usePageSearch() /
 //pageModal相关逻辑
 //1.处理密码的逻辑
 const newCallback = () => {
-  const pswItem = modalConfig.formItems.find((item) => item.field === 'password')
+  const pswItem = modalConfig.formItems!.find((item) => item.field === 'password')
   pswItem!.isHidden = false
 }
 const editCallback = () => {
   if (modalConfig) {
 
-    const pswItem = modalConfig.formItems.find((item) => item.field === 'password')
+    const pswItem = modalConfig.formItems!.find((item) => item.field === 'password')
     pswItem!.isHidden = true
   }
 }

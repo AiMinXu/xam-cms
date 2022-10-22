@@ -1,18 +1,15 @@
 <template>
   <div class="chat">
-    <h2>chat</h2>
+    <Editor v-model:value="htmlStr"/>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'chat',
-  setup() {
-    return {}
-  }
-})
+<script setup lang="ts">
+import Editor from '@/base-ui/editor';
+import { ref } from 'vue';
+const htmlStr = ref<string>('ikun')
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

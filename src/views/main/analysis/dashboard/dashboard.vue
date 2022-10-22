@@ -1,7 +1,13 @@
 <template>
   <div class="dashboard">
     <!-- 顶部展示 -->
-
+    <el-row :gutter="10">
+      <template v-for="item in topPanelData" :key="item.title">
+        <el-col :md="12" :lg="6" :xl="6">
+          <statistical-panel :panelData="item" />
+        </el-col>
+      </template>
+    </el-row>
     <!-- 中间展示 -->
     <el-row :gutter="10">
       <el-col :span="7">
@@ -20,7 +26,6 @@
         </hy-card>
       </el-col>
     </el-row>
-
     <!-- 底部展示 -->
     <el-row :gutter="10" class="row">
       <el-col :span="12">
@@ -40,6 +45,7 @@
 <script lang="ts" setup>
 import HyCard from '@/base-ui/card';
 import { BarEchart, LineEchart, MapEchart, PieEchart, RoseEchart } from '@/components/page-echarts';
+import StatisticalPanel from '@/components/statistical-panel';
 
 import { useStore } from '@/store';
 import { computed } from 'vue';

@@ -47,7 +47,7 @@ const loginModule: Module<ILoginState, IRootState> = {
     //登录验证逻辑
     async accountLoginAction({ commit, dispatch }, payload: IAccount) {
       //1.实现登录逻辑
-      const loginResult = await accountLoginRequest(payload)
+      const loginResult: any = await accountLoginRequest(payload)
       const { id, token } = loginResult.data
       commit('changeToken', token) //提交mutation,并携带参数
       localCache.setCache('token', token) //token本地缓存

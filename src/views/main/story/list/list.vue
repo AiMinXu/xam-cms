@@ -1,18 +1,12 @@
 <template>
   <div class="list">
-    <h2>list</h2>
+    <PageContent :content-table-config="contentTableConfig" page-name="story" />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'list',
-  setup() {
-    return {}
-  }
-})
+<script setup lang="ts">
+import PageContent from '@/components/page-content/src/page-content.vue';
+import { contentTableConfig } from './config/content-config';
 </script>
 
 <style scoped></style>
